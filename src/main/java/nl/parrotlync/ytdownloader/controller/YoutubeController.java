@@ -23,9 +23,14 @@ public class YoutubeController {
     public String download(@RequestParam(value="query") String query) throws YoutubeException, IOException {
         if (query != null && !query.isEmpty()) {
             String id = getVideoID(query);
-            YoutubeVideo video = downloader.getVideo(id);
-            File output = video.download(video.audioFormats().get(0), outputDir, id, true);
-            return host + output.getName();
+            File check = new File("download/" + id + ".m4a");
+            if (!check.exists()) {
+                YoutubeVideo video = downloader.getVideo(id);
+                File output = video.download(video.audioFormats().get(0), outputDir, id, true);
+                return host + output.getName();
+            } else {
+                return host + id + ".m4a";
+            }
         }
         return "Please specify a query!";
     }
