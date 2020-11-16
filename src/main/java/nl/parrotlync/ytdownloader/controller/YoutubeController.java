@@ -27,10 +27,15 @@ public class YoutubeController {
             File check = new File("download/" + id + ".m4a");
             if (!check.exists()) {
                 YoutubeVideo video = downloader.getVideo(id);
-                File output = video.download(video.audioFormats().get(0), outputDir, id, true);
-                response.put("status", "OK");
-                response.put("msg", "Download successful!");
-                response.put("url", host + output.getName());
+                if (video.details().lengthSeconds() < 1801) {
+                    File output = video.download(video.audioFormats().get(0), outputDir, id, true);
+                    response.put("status", "OK");
+                    response.put("msg", "Download successful!");
+                    response.put("url", host + output.getName());
+                } else {
+                    response.put("status", "ERROR");
+                    response.put("msg", "Video is too long! Maximum length is 30 minutes.");
+                }
                 return response;
             } else {
                 response.put("status", "OK");
