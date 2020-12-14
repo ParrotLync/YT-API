@@ -15,8 +15,8 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/api/download")
 public class YoutubeController {
-    private YoutubeDownloader downloader = new YoutubeDownloader();
-    private File outputDir = new File("download");
+    private final YoutubeDownloader downloader = new YoutubeDownloader();
+    private final File outputDir = new File("download");
     private String host = "https://drive.ipictserver.nl/yt/";
 
     @GetMapping
@@ -36,13 +36,12 @@ public class YoutubeController {
                     response.put("status", "ERROR");
                     response.put("msg", "Video is too long! Maximum length is 30 minutes.");
                 }
-                return response;
             } else {
                 response.put("status", "OK");
                 response.put("msg", "File already exists!");
                 response.put("url", host + id + ".m4a");
-                return response;
             }
+            return response;
         }
         response.put("status", "ERROR");
         response.put("msg", "Please specify a valid query!");
